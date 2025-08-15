@@ -37,7 +37,7 @@ btn.onclick = async () => {
           continue; // keep polling
         }
       } catch (e) {
-        console.warn("oh no :-(",e")
+        console.warn("oh no :-(",e)
         continue;
       }
 
