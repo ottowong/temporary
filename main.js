@@ -28,8 +28,9 @@ btn.onclick = async () => {
     while (!token) {
       await new Promise(r => setTimeout(r, 1000)); // wait 1s
       const resultResp = await fetch(`https://gaming.sadlads.com/result?id=${taskId}`);
+      console.log("resultResp",resultResp);
       const text = await resultResp.text();
-
+      console.log("text",text);
       if (text === "CAPTCHA_NOT_READY") {
         console.log("CAPTCHA not ready yet, retrying...");
         continue; // keep polling
