@@ -13,7 +13,7 @@ btn.textContent = 'Start';
 
 btn.onclick = async () => {
   const regionX = 1011, regionY = 701;
-  let pixelX = 741, pixelY = 414;
+  let pixelX = 742, pixelY = 414;
   const color = 1; // Example color index
 	while (true){
   try {
@@ -60,7 +60,6 @@ btn.onclick = async () => {
     console.log('Error: ' + err);
   }
   pixelX = pixelX + 1;
-  pixelY = pixelY + 1;
   await new Promise(r => setTimeout(r, 30000));
 }
 };
