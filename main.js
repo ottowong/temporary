@@ -24,33 +24,46 @@ btn.onclick = async () => {
     console.log('Task ID:', taskId);
 
     // 2. Poll for token
-     let token = null;
-    while (!token) {
+    let token = null;
+    let attempts = 0;
+    const maxAttempts = 60; // 60 seconds max
+
+    while (!token && attempts < maxAttempts) {
+      attempts++;
+      let text = "";
+
       try {
         await new Promise(r => setTimeout(r, 1000)); // wait 1s
         const resultResp = await fetch(`https://gaming.sadlads.com/result?id=${taskId}`);
-        console.log("resultResp",resultResp);
-        const text = await resultResp.text();
-        console.log("text",text);
+        text = await resultResp.text();
+        console.log("Poll attempt", attempts, "response:", text);
+
         if (text === "CAPTCHA_NOT_READY") {
           console.log("CAPTCHA not ready yet, retrying...");
           continue; // keep polling
         }
       } catch (e) {
-        console.warn("oh no :-(",e)
+        console.warn("Fetch failed, retrying...", e);
         continue;
       }
 
       try {
         const resultData = JSON.parse(text);
-        if (resultData.value) token = resultData.value;
+        if (resultData.value) {
+          token = resultData.value;
+        }
       } catch (e) {
         console.warn("Unexpected response, retrying...", text);
       }
     }
 
+    if (!token) {
+      alert("Failed to get token after max attempts.");
+      return;
+    }
+
     console.log('Got token:', token);
-    
+
     // 3. Paint pixel
     const paintResp = await fetch(`https://backend.wplace.live/s0/pixel/${regionX}/${regionY}`, {
       method: 'POST',
@@ -70,3 +83,6 @@ btn.onclick = async () => {
     alert('Error: ' + err);
   }
 };
+
+win.appendChild(btn);
+document.body.appendChild(win);
