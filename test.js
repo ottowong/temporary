@@ -26,8 +26,9 @@ btn.onclick = async () => {
     // 2. Poll for token
     let token = null;
     while (!token) {
-      await new Promise(r => setTimeout(r, 10000)); // wait 1s between checks
+      await new Promise(r => setTimeout(r, 1000)); // wait 1s between checks
       const resultResp = await fetch(`https://gaming.sadlads.com/result?id=${taskId}`);
+      console.log("resultData",resultData);
       const resultData = await resultResp.json();
       if (resultData.value) {
         token = resultData.value;
