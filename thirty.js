@@ -14,7 +14,7 @@ btn.textContent = 'Start';
 btn.onclick = async () => {
   const regionX = 1011, regionY = 701;
   let pixelX = 741, pixelY = 414;
-  const color = 5; // Example color index
+  const color = 1; // Example color index
 	while (true){
   try {
     // 1. Request task ID
@@ -53,11 +53,11 @@ btn.onclick = async () => {
       })
     });
     const paintData = await paintResp.json();
-    alert('Painted: ' + (paintData?.painted === 1 ? 'Success' : 'Failed'));
+    console.log('Painted: ' + (paintData?.painted === 1 ? 'Success' : 'Failed'));
 
   } catch (err) {
     console.error(err);
-    alert('Error: ' + err);
+    console.log('Error: ' + err);
   }
   pixelX = pixelX + 1;
   pixelY = pixelY + 1;
