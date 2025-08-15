@@ -13,7 +13,7 @@ btn.textContent = 'Start';
 
 btn.onclick = async () => {
   const regionX = 1011, regionY = 701;
-  const pixelX = 3421, pixelY = 1494;
+  const pixelX = 421, pixelY = 494;
   const color = 5; // Example color index
 
   try {
