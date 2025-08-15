@@ -13,8 +13,8 @@ btn.textContent = 'Start';
 
 btn.onclick = async () => {
   const regionX = 1011, regionY = 701;
-  const pixelX = 421, pixelY = 494;
-  const color = 5; // Example color index
+  const pixelX = 3421, pixelY = 1494;
+  const color = 5;
 
   try {
     // 1. Request task ID
@@ -26,16 +26,26 @@ btn.onclick = async () => {
     // 2. Poll for token
     let token = null;
     while (!token) {
-      await new Promise(r => setTimeout(r, 1000)); // wait 1s between checks
+      await new Promise(r => setTimeout(r, 1000)); // wait 1s
       const resultResp = await fetch(`https://gaming.sadlads.com/result?id=${taskId}`);
-      const resultData = await resultResp.json();
-      if (resultData.value) {
-        token = resultData.value;
+      const text = await resultResp.text();
+
+      if (text === "CAPTCHA_NOT_READY") {
+        console.log("CAPTCHA not ready yet, retrying...");
+        continue; // keep polling
+      }
+
+      try {
+        const resultData = JSON.parse(text);
+        if (resultData.value) token = resultData.value;
+      } catch (e) {
+        console.warn("Unexpected response, retrying...", text);
       }
     }
+
     console.log('Got token:', token);
 
-    // 3. Paint pixel using dynamic token
+    // 3. Paint pixel
     const paintResp = await fetch(`https://backend.wplace.live/s0/pixel/${regionX}/${regionY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
@@ -54,6 +64,3 @@ btn.onclick = async () => {
     alert('Error: ' + err);
   }
 };
-
-win.appendChild(btn);
-document.body.appendChild(win);
